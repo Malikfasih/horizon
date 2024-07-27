@@ -1,27 +1,22 @@
-export const dynamic = "force-dynamic";
-import type { Metadata } from "next";
-import "../globals.css";
-import SideBar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
+import Sidebar from "@/components/Sidebar";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Horizon",
-  description: "Horizon is a modern banking platform for everyone.",
-  icons: {
-    icon: "/icons/logo.svg",
-  },
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const loggedIn = { firstName: "Fasih", lastName: "Malik" };
+  const loggedIn = await getLoggedInUser();
+
+  if (!loggedIn) redirect("/sign-in");
+  console.log("loggedIn user in layout:", loggedIn);
+
   return (
     <main className="flex h-screen w-full font-inter">
-      <SideBar user={loggedIn} />
+      <Sidebar user={loggedIn} />
 
       <div className="flex size-full flex-col">
         <div className="root-layout">
