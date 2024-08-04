@@ -1,7 +1,34 @@
-import React from "react";
+import HeaderBox from "@/components/HeaderBox";
 
-const page = () => {
-  return <div>page</div>;
+import RightSidebar from "@/components/RightSidebar";
+import TotalBalanceBox from "@/components/TotalBalanceBox";
+
+import { getLoggedInUser } from "@/lib/actions/user.actions";
+
+const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
+  const loggedIn = await getLoggedInUser();
+
+  return (
+    <section className="home">
+      <div className="home-content">
+        <header className="home-header">
+          <HeaderBox
+            type="greeting"
+            title="Welcome"
+            user={loggedIn?.firstName || "Guest"}
+            subtext="Access and manage your account and transactions efficiently."
+          />
+          <TotalBalanceBox
+            accounts={[]}
+            totalBanks={7}
+            totalCurrentBalance={234000}
+          />
+        </header>
+      </div>
+
+      <RightSidebar user={loggedIn} transactions={[]} banks={[]} />
+    </section>
+  );
 };
 
-export default page;
+export default Home;
